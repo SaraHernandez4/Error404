@@ -159,10 +159,14 @@ class WebRequestHandler(BaseHTTPRequestHandler):# Clase
         all_books = set(str(i+1) for i in range(6))# Crea un conjunto de cadenas de texto que representan los identificadores de todos los libros disponibles (del 1 al 6).
         new = [b for b in all_books if b not in [vb.decode() for vb in books]]# Encuentra los libros que el usuario aún no ha visto comparando los identificadores de todos los libros con los identificadores de los libros que ha visto el usuario.
         if new:# Comprueba si hay libros nuevos para recomendar.
-            return new[0]# Devuelve el primer libro nuevo encontrado para recomendar.
+            return self.get_book_link(new[0])# Devuelve al MÉTODO llamado el primer libro nuevo encontrado para recomendar.
         else:#  Si no hay libros nuevos para recomendar.
-            return random.choice([vb.decode() for vb in books]) # Elige aleatoriamente un libro que el usuario haya visto anteriormente y lo devuelve como recomendación.
+            return self.get_book_link(random.choice([vb.decode() for vb in books])) # Elige aleatoriamente un libro que el usuario haya visto anteriormente y lo devuelve como recomendación AL MÉTODO.
 
+    def get_book_link(self, book_id):# Este METODO devuelve el LINK del LIBRO RECOMENDADO para su facil ACCESO.
+        # Devuelve el LINK del LIBRO RECOMENDADO en su propio NOMBRE.
+        return f"<a href='/book/{book_id}'>Libro {book_id}</a>"
+        
 if __name__ == "__main__":# Verifica si el script está siendo ejecutado directamente como un programa independiente y no está siendo importado como un módulo en otro script.
     print("Server starting...") #Imprime un mensaje en la consola indicando que el servidor está empezando a ejecutarse.
     server = HTTPServer(("0.0.0.0", 8000), WebRequestHandler) #Crea una instancia de HTTPServer que escucha en todas las interfaces de red ("0.0.0.0") en el puerto 8000. 
